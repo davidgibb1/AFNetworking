@@ -1253,7 +1253,14 @@ typedef enum {
         }
     }];
 
-    if (parameters) {
+    if ([parameters isKindOfClass:[NSData class]]) {
+        if (![mutableRequest valueForHTTPHeaderField:@"Content-Type"]) {
+            [mutableRequest setValue:@"application/octet-stream" forHTTPHeaderField:@"Content-Type"];
+        }
+
+        [mutableRequest setHTTPBody:(NSData *)parameters];
+    }
+    else if (parameters) {
         if (![mutableRequest valueForHTTPHeaderField:@"Content-Type"]) {
             [mutableRequest setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
         }
